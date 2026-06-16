@@ -1,31 +1,26 @@
-import * as THREE from 'three';
-
-import { GLTFLoader }
-from 'https://threejs.org/examples/jsm/loaders/GLTFLoader.js';
+import * as THREE from 'https://threejs.org/build/three.module.js';
 
 const scene = new THREE.Scene();
 
 const camera = new THREE.PerspectiveCamera(
 75,
-window.innerWidth/window.innerHeight,
+window.innerWidth / window.innerHeight,
 0.1,
-1000
+10000
 );
 
-camera.position.set(0,10,30);
+camera.position.set(0, 500, 8000);
 
-const renderer = new THREE.WebGLRenderer({
-antialias:true
-});
+const renderer = new THREE.WebGLRenderer();
 
 renderer.setSize(
 window.innerWidth,
 window.innerHeight
 );
 
-document
-.getElementById("container")
-.appendChild(renderer.domElement);
+document.body.appendChild(
+renderer.domElement
+);
 
 scene.add(
 new THREE.AmbientLight(
@@ -34,61 +29,25 @@ new THREE.AmbientLight(
 )
 );
 
-const loader =
-new GLTFLoader();
+const geometry = new THREE.BoxGeometry(
+2500,
+3000,
+7000
+);
 
-loader.load(
+const material =
+new THREE.MeshNormalMaterial({
+wireframe: true
+});
 
-'./ship.glb',
+const shipPlaceholder =
+new THREE.Mesh(
+geometry,
+material
+);
 
-(gltf)=>{
-
-    console.log("SHIP LOADED");
-
-    const ship =
-    gltf.scene;
-
-    scene.add(ship);
-
-    const box =
-    new THREE.Box3()
-    .setFromObject(ship);
-
-    const size =
-    box.getSize(
-        new THREE.Vector3()
-    );
-
-    const center =
-    box.getCenter(
-        new THREE.Vector3()
-    );
-
-    ship.position.sub(center);
-
-    const maxDim =
-    Math.max(
-        size.x,
-        size.y,
-        size.z
-    );
-
-    ship.scale.setScalar(
-        10/maxDim
-    );
-
-},
-
-undefined,
-
-(err)=>{
-
-    console.error(
-        err
-    );
-
-}
-
+scene.add(
+shipPlaceholder
 );
 
 function animate(){
@@ -96,6 +55,8 @@ function animate(){
 requestAnimationFrame(
 animate
 );
+
+shipPlaceholder.rotation.y += 0.002;
 
 renderer.render(
 scene,
