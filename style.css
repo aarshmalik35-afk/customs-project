@@ -1,0 +1,25 @@
+body {
+
+    margin: 0;
+
+    background: #0b1f3a;
+
+    color: white;
+
+    font-family: Arial;
+
+}
+
+h1 {
+
+    text-align: center;
+
+}
+
+#container {
+
+    width: 100vw;
+
+    height: 90vh;
+
+}
