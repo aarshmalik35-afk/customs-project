@@ -1,6 +1,6 @@
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
-import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js';
-import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js';
+import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
+import { OrbitControls } from 'https://unpkg.com/three@0.160.0/examples/jsm/controls/OrbitControls.js';
+import { GLTFLoader } from 'https://unpkg.com/three@0.160.0/examples/jsm/loaders/GLTFLoader.js';
 
 // Scene
 const scene = new THREE.Scene();
@@ -14,25 +14,41 @@ const camera = new THREE.PerspectiveCamera(
     1000
 );
 
-camera.position.set(0, 5, 15);
+camera.position.set(0, 5, 30);
 
 // Renderer
 const renderer = new THREE.WebGLRenderer({
     antialias: true
 });
 
-renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setSize(
+    window.innerWidth,
+    window.innerHeight
+);
 
 document
     .getElementById('container')
     .appendChild(renderer.domElement);
 
-// Lighting
-const ambientLight = new THREE.AmbientLight(0xffffff, 3);
+// Lights
+const ambientLight = new THREE.AmbientLight(
+    0xffffff,
+    5
+);
+
 scene.add(ambientLight);
 
-const directionalLight = new THREE.DirectionalLight(0xffffff, 3);
-directionalLight.position.set(10, 10, 10);
+const directionalLight = new THREE.DirectionalLight(
+    0xffffff,
+    5
+);
+
+directionalLight.position.set(
+    10,
+    20,
+    10
+);
+
 scene.add(directionalLight);
 
 // Controls
@@ -43,7 +59,17 @@ const controls = new OrbitControls(
 
 controls.enableDamping = true;
 
-// Load Ship
+// TEST CUBE
+const cube = new THREE.Mesh(
+    new THREE.BoxGeometry(5, 5, 5),
+    new THREE.MeshNormalMaterial()
+);
+
+cube.position.set(-10, 0, 0);
+
+scene.add(cube);
+
+// GLB Loader
 const loader = new GLTFLoader();
 
 loader.load(
@@ -56,21 +82,19 @@ loader.load(
 
         scene.add(ship);
 
-        // Auto-center model
-        const box = new THREE.Box3().setFromObject(ship);
-        const center = box.getCenter(new THREE.Vector3());
+        ship.position.set(
+            0,
+            0,
+            0
+        );
 
-        ship.position.sub(center);
+        ship.scale.set(
+            10,
+            10,
+            10
+        );
 
-        // Auto-scale model
-        const size = box.getSize(new THREE.Vector3());
-        const maxDim = Math.max(size.x, size.y, size.z);
-
-        const scale = 10 / maxDim;
-
-        ship.scale.setScalar(scale);
-
-        console.log('Ship Loaded Successfully');
+        console.log('SHIP LOADED');
 
     },
 
@@ -86,7 +110,7 @@ loader.load(
     function (error) {
 
         console.error(
-            'Error loading model:',
+            'MODEL ERROR:',
             error
         );
 
@@ -94,12 +118,14 @@ loader.load(
 
 );
 
-// Animation Loop
+// Animation
 function animate() {
 
     requestAnimationFrame(
         animate
     );
+
+    cube.rotation.y += 0.01;
 
     controls.update();
 
@@ -112,7 +138,7 @@ function animate() {
 
 animate();
 
-// Resize Handler
+// Resize
 window.addEventListener(
     'resize',
     () => {
