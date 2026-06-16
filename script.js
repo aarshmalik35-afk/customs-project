@@ -63,7 +63,7 @@ new GLTFLoader();
 
 loader.load(
 
-    './model/ship.gltf',
+    './model/ship.gib',
 
     function(gltf){
 
