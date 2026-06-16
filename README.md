@@ -1,20 +1,23 @@
-<!DOCTYPE html>
-<html>
+# Customs Digital Twin
 
-<head>
-    <title>Customs 3D Twin</title>
+A digital twin platform for customs shipment monitoring.
 
-    <link rel="stylesheet" href="style.css">
-</head>
+## Features
 
-<body>
+- OCR-based document extraction
+- Risk assessment engine
+- Shipment workflow tracking
+- Telemetry simulation
+- 3D shipment visualization
 
-    <h1>CUSTOMS DIGITAL TWIN</h1>
+## Technologies
 
-    <div id="container"></div>
+- Python
+- Power Apps
+- Excel
+- Three.js
+- GLTF Models
 
-    <script type="module" src="script.js"></script>
+## Digital Twin
 
-</body>
-
-</html>
+The 3D twin visualizes shipment status, risk level, and telemetry information through an interactive cargo ship model.
