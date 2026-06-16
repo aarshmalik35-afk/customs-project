@@ -1,34 +1,17 @@
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
-
-import { OrbitControls }
-from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js';
-
-import { GLTFLoader }
-from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js';
+import * as THREE from "https://unpkg.com/three@0.160.0/build/three.module.js?module";
 
 const scene = new THREE.Scene();
 
-scene.background =
-new THREE.Color(0x0b1f3a);
-
-const camera =
-new THREE.PerspectiveCamera(
+const camera = new THREE.PerspectiveCamera(
 75,
 window.innerWidth/window.innerHeight,
 0.1,
 1000
 );
 
-camera.position.set(
-0,
-5,
-20
-);
+camera.position.z = 5;
 
-const renderer =
-new THREE.WebGLRenderer({
-antialias:true
-});
+const renderer = new THREE.WebGLRenderer();
 
 renderer.setSize(
 window.innerWidth,
@@ -39,85 +22,21 @@ document
 .getElementById("container")
 .appendChild(renderer.domElement);
 
-const ambient =
-new THREE.AmbientLight(
-0xffffff,
-4
+const cube = new THREE.Mesh(
+new THREE.BoxGeometry(),
+new THREE.MeshNormalMaterial()
 );
 
-scene.add(ambient);
-
-const directional =
-new THREE.DirectionalLight(
-0xffffff,
-4
-);
-
-directional.position.set(
-10,
-10,
-10
-);
-
-scene.add(directional);
-
-const controls =
-new OrbitControls(
-camera,
-renderer.domElement
-);
-
-const loader =
-new GLTFLoader();
-
-loader.load(
-
-'ship.glb',
-
-function(gltf){
-
-const model =
-gltf.scene;
-
-scene.add(model);
-
-model.scale.set(
-5,
-5,
-5
-);
-
-console.log(
-"SHIP LOADED"
-);
-
-},
-
-undefined,
-
-function(error){
-
-console.error(
-"MODEL ERROR",
-error
-);
-
-}
-
-);
+scene.add(cube);
 
 function animate(){
 
-requestAnimationFrame(
-animate
-);
+requestAnimationFrame(animate);
 
-controls.update();
+cube.rotation.x += 0.01;
+cube.rotation.y += 0.01;
 
-renderer.render(
-scene,
-camera
-);
+renderer.render(scene,camera);
 
 }
 
