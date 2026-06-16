@@ -1,104 +1,101 @@
-import * as THREE from
-'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js';
+import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js';
 
-import { OrbitControls }
-from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js';
-
-import { GLTFLoader }
-from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js';
-
+// Scene
 const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0b1f3a);
 
-scene.background =
-new THREE.Color(0x0b1f3a);
-
-const camera =
-new THREE.PerspectiveCamera(
-75,
-window.innerWidth/window.innerHeight,
-0.1,
-1000
+// Camera
+const camera = new THREE.PerspectiveCamera(
+    75,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    1000
 );
 
-const renderer =
-new THREE.WebGLRenderer(
-{
-    antialias:true
-}
-);
+camera.position.set(0, 5, 15);
 
-renderer.setSize(
-window.innerWidth,
-window.innerHeight
-);
+// Renderer
+const renderer = new THREE.WebGLRenderer({
+    antialias: true
+});
+
+renderer.setSize(window.innerWidth, window.innerHeight);
 
 document
-.getElementById("container")
-.appendChild(renderer.domElement);
+    .getElementById('container')
+    .appendChild(renderer.domElement);
 
-const light =
-new THREE.DirectionalLight(
-0xffffff,
-3
+// Lighting
+const ambientLight = new THREE.AmbientLight(0xffffff, 3);
+scene.add(ambientLight);
+
+const directionalLight = new THREE.DirectionalLight(0xffffff, 3);
+directionalLight.position.set(10, 10, 10);
+scene.add(directionalLight);
+
+// Controls
+const controls = new OrbitControls(
+    camera,
+    renderer.domElement
 );
 
-light.position.set(
-10,
-10,
-10
-);
+controls.enableDamping = true;
 
-scene.add(light);
-
-const ambient =
-new THREE.AmbientLight(
-0xffffff,
-2
-);
-
-scene.add(ambient);
-
-const loader =
-new GLTFLoader();
+// Load Ship
+const loader = new GLTFLoader();
 
 loader.load(
 
-    './model/ship.glb',
+    'ship.glb',
 
-    function(gltf){
+    function (gltf) {
 
-        const model =
-        gltf.scene;
+        const ship = gltf.scene;
 
-        scene.add(model);
+        scene.add(ship);
 
-        model.scale.set(
-            1,
-            1,
-            1
+        // Auto-center model
+        const box = new THREE.Box3().setFromObject(ship);
+        const center = box.getCenter(new THREE.Vector3());
+
+        ship.position.sub(center);
+
+        // Auto-scale model
+        const size = box.getSize(new THREE.Vector3());
+        const maxDim = Math.max(size.x, size.y, size.z);
+
+        const scale = 10 / maxDim;
+
+        ship.scale.setScalar(scale);
+
+        console.log('Ship Loaded Successfully');
+
+    },
+
+    function (xhr) {
+
+        console.log(
+            (xhr.loaded / xhr.total * 100) +
+            '% loaded'
         );
 
     },
 
-    undefined,
+    function (error) {
 
-    function(error){
-
-        console.error(error);
+        console.error(
+            'Error loading model:',
+            error
+        );
 
     }
 
 );
 
-camera.position.z = 15;
-
-const controls =
-new OrbitControls(
-camera,
-renderer.domElement
-);
-
-function animate(){
+// Animation Loop
+function animate() {
 
     requestAnimationFrame(
         animate
@@ -114,3 +111,22 @@ function animate(){
 }
 
 animate();
+
+// Resize Handler
+window.addEventListener(
+    'resize',
+    () => {
+
+        camera.aspect =
+            window.innerWidth /
+            window.innerHeight;
+
+        camera.updateProjectionMatrix();
+
+        renderer.setSize(
+            window.innerWidth,
+            window.innerHeight
+        );
+
+    }
+);
