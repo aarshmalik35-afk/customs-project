@@ -2,16 +2,15 @@ import * as THREE from "https://unpkg.com/three@0.160.0/build/three.module.js?mo
 import { GLTFLoader } from "https://unpkg.com/three@0.160.0/examples/jsm/loaders/GLTFLoader.js?module";
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x0b1f3a);
 
 const camera = new THREE.PerspectiveCamera(
 75,
 window.innerWidth / window.innerHeight,
 0.1,
-1000
+10000
 );
 
-camera.position.set(0, 20, 50);
+camera.position.set(0, 0, 200);
 
 const renderer = new THREE.WebGLRenderer({
 antialias: true
@@ -22,66 +21,68 @@ window.innerWidth,
 window.innerHeight
 );
 
-document
-.getElementById("container")
-.appendChild(renderer.domElement);
-
-const ambient = new THREE.AmbientLight(
-0xffffff,
-5
+document.body.appendChild(
+renderer.domElement
 );
 
-scene.add(ambient);
+scene.add(
+new THREE.AmbientLight(
+0xffffff,
+10
+)
+);
 
 const loader = new GLTFLoader();
 
 loader.load(
 
-'ship.glb',
+"ship.glb",
 
-function(gltf){
+(gltf) => {
 
-const ship = gltf.scene;
+    const model = gltf.scene;
 
-scene.add(ship);
+    scene.add(model);
 
-console.log("SHIP LOADED");
+    console.log("SHIP LOADED");
 
-console.log(ship);
+    model.scale.set(
+        100,
+        100,
+        100
+    );
 
-ship.position.set(
-0,
-0,
-0
-);
-
-// MASSIVE SCALE
-ship.scale.set(
-100,
-100,
-100
-);
+    model.position.set(
+        0,
+        0,
+        0
+    );
 
 },
 
 undefined,
 
-function(error){
+(error) => {
 
-console.error(error);
+    console.error(
+        "LOAD ERROR",
+        error
+    );
 
 }
 
 );
 
-function animate(){
+function animate() {
 
-requestAnimationFrame(animate);
+    requestAnimationFrame(
+        animate
+    );
 
-renderer.render(
-scene,
-camera
-);
+    renderer.render(
+        scene,
+        camera
+    );
 
 }
 
