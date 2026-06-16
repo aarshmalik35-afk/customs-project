@@ -1,158 +1,124 @@
-import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
-import { OrbitControls } from 'https://unpkg.com/three@0.160.0/examples/jsm/controls/OrbitControls.js';
-import { GLTFLoader } from 'https://unpkg.com/three@0.160.0/examples/jsm/loaders/GLTFLoader.js';
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
 
-// Scene
+import { OrbitControls }
+from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js';
+
+import { GLTFLoader }
+from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js';
+
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x0b1f3a);
 
-// Camera
-const camera = new THREE.PerspectiveCamera(
-    75,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    1000
+scene.background =
+new THREE.Color(0x0b1f3a);
+
+const camera =
+new THREE.PerspectiveCamera(
+75,
+window.innerWidth/window.innerHeight,
+0.1,
+1000
 );
 
-camera.position.set(0, 5, 30);
+camera.position.set(
+0,
+5,
+20
+);
 
-// Renderer
-const renderer = new THREE.WebGLRenderer({
-    antialias: true
+const renderer =
+new THREE.WebGLRenderer({
+antialias:true
 });
 
 renderer.setSize(
-    window.innerWidth,
-    window.innerHeight
+window.innerWidth,
+window.innerHeight
 );
 
 document
-    .getElementById('container')
-    .appendChild(renderer.domElement);
+.getElementById("container")
+.appendChild(renderer.domElement);
 
-// Lights
-const ambientLight = new THREE.AmbientLight(
-    0xffffff,
-    5
+const ambient =
+new THREE.AmbientLight(
+0xffffff,
+4
 );
 
-scene.add(ambientLight);
+scene.add(ambient);
 
-const directionalLight = new THREE.DirectionalLight(
-    0xffffff,
-    5
+const directional =
+new THREE.DirectionalLight(
+0xffffff,
+4
 );
 
-directionalLight.position.set(
-    10,
-    20,
-    10
+directional.position.set(
+10,
+10,
+10
 );
 
-scene.add(directionalLight);
+scene.add(directional);
 
-// Controls
-const controls = new OrbitControls(
-    camera,
-    renderer.domElement
+const controls =
+new OrbitControls(
+camera,
+renderer.domElement
 );
 
-controls.enableDamping = true;
-
-// TEST CUBE
-const cube = new THREE.Mesh(
-    new THREE.BoxGeometry(5, 5, 5),
-    new THREE.MeshNormalMaterial()
-);
-
-cube.position.set(-10, 0, 0);
-
-scene.add(cube);
-
-// GLB Loader
-const loader = new GLTFLoader();
+const loader =
+new GLTFLoader();
 
 loader.load(
 
-    'ship.glb',
+'ship.glb',
 
-    function (gltf) {
+function(gltf){
 
-        const ship = gltf.scene;
+const model =
+gltf.scene;
 
-        scene.add(ship);
+scene.add(model);
 
-        ship.position.set(
-            0,
-            0,
-            0
-        );
+model.scale.set(
+5,
+5,
+5
+);
 
-        ship.scale.set(
-            10,
-            10,
-            10
-        );
+console.log(
+"SHIP LOADED"
+);
 
-        console.log('SHIP LOADED');
+},
 
-    },
+undefined,
 
-    function (xhr) {
+function(error){
 
-        console.log(
-            (xhr.loaded / xhr.total * 100) +
-            '% loaded'
-        );
+console.error(
+"MODEL ERROR",
+error
+);
 
-    },
-
-    function (error) {
-
-        console.error(
-            'MODEL ERROR:',
-            error
-        );
-
-    }
+}
 
 );
 
-// Animation
-function animate() {
+function animate(){
 
-    requestAnimationFrame(
-        animate
-    );
+requestAnimationFrame(
+animate
+);
 
-    cube.rotation.y += 0.01;
+controls.update();
 
-    controls.update();
-
-    renderer.render(
-        scene,
-        camera
-    );
+renderer.render(
+scene,
+camera
+);
 
 }
 
 animate();
-
-// Resize
-window.addEventListener(
-    'resize',
-    () => {
-
-        camera.aspect =
-            window.innerWidth /
-            window.innerHeight;
-
-        camera.updateProjectionMatrix();
-
-        renderer.setSize(
-            window.innerWidth,
-            window.innerHeight
-        );
-
-    }
-);
