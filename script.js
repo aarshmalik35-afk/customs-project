@@ -92,6 +92,8 @@ loader.load(
         );
 
         ship.position.sub(center);
+        ship.position.x = -1200;
+        ship.position.y = -200;
 
         // Auto scale
         const size =
@@ -107,7 +109,7 @@ loader.load(
         );
 
         const scale =
-        6000 / maxDim;
+        5000 / maxDim;
 
         ship.scale.set(
             scale,
