@@ -63,6 +63,9 @@ let shockEvents = 0;
 // NEW
 let tilt = 2;
 
+let doorStatus = "Closed";
+let sealStatus = "Intact";
+
 const vibrationLevels = [
     "Low",
     "Medium",
@@ -245,15 +248,35 @@ if(Math.random() < 0.10){
 
 }
 
-const doorStatus =
-Math.random() > 0.98
-? "Open"
-: "Closed";
+// Door opens very rarely
+if(
+    doorStatus === "Closed" &&
+    Math.random() < 0.01
+){
 
-const sealStatus =
-Math.random() > 0.98
-? "Broken"
-: "Intact";
+    doorStatus = "Open";
+
+}
+
+// Door closes again occasionally
+else if(
+    doorStatus === "Open" &&
+    Math.random() < 0.30
+){
+
+    doorStatus = "Closed";
+
+}
+
+// Seal breaches are extremely rare
+if(
+    sealStatus === "Intact" &&
+    Math.random() < 0.005
+){
+
+    sealStatus = "Broken";
+
+}
 
    if(Math.random() < 0.03){
 
