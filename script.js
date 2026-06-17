@@ -55,6 +55,34 @@ scene.add(directionalLight);
 // Ship variable
 let ship = null;
 
+// Realistic telemetry state
+let temperature = 28;
+let humidity = 65;
+let shockEvents = 0;
+
+// NEW
+let tilt = 2;
+
+const vibrationLevels = [
+    "Low",
+    "Medium",
+    "High"
+];
+
+let vibrationIndex = 0;
+let vibration = vibrationLevels[0];
+
+const route = [
+    "Shanghai Port",
+    "Singapore Port",
+    "Mumbai Port",
+    "Dubai Port",
+    "Rotterdam Port"
+];
+
+let routeIndex = 1;
+let currentLocation = route[routeIndex];
+
 const containerId =
 "CONT-" +
 Math.floor(100000 + Math.random() * 900000);
@@ -62,6 +90,17 @@ Math.floor(100000 + Math.random() * 900000);
 document.getElementById(
 "containerId"
 ).textContent = containerId;
+
+const shipmentId =
+"SHP-" +
+Math.floor(
+1000 + Math.random()*9000
+);
+
+document.getElementById(
+"shipmentId"
+).textContent =
+shipmentId;
 
 // Load GLB
 const loader = new GLTFLoader();
@@ -145,68 +184,107 @@ loader.load(
 // Telemetry
 function updateTelemetry(){
 
-    const temperature =
-    Math.floor(20 + Math.random()*20);
+temperature +=
+Math.floor(Math.random()*3) - 1;
 
-    const humidity =
-    Math.floor(40 + Math.random()*50);
+humidity +=
+Math.floor(Math.random()*3) - 1;
 
-    const shockEvents =
-    Math.floor(Math.random()*10);
+temperature =
+Math.max(
+20,
+Math.min(40, temperature)
+);
 
-    const tilt =
-    Math.floor(Math.random()*12);
+humidity =
+Math.max(
+40,
+Math.min(90, humidity)
+);
 
-    const vibrationLevels = [
-        "Low",
-        "Medium",
-        "High"
-    ];
+// Shock events accumulate slowly
+if(Math.random() < 0.03){
 
-    const vibration =
+    shockEvents++;
+
+}
+
+// Tilt changes slowly
+tilt +=
+Math.floor(Math.random()*3) - 1;
+
+tilt =
+Math.max(
+0,
+Math.min(12, tilt)
+);
+
+// Vibration changes rarely
+if(Math.random() < 0.10){
+
+    const direction =
+    Math.random() < 0.5
+    ? -1
+    : 1;
+
+    vibrationIndex += direction;
+
+    vibrationIndex =
+    Math.max(
+        0,
+        Math.min(
+            2,
+            vibrationIndex
+        )
+    );
+
+    vibration =
     vibrationLevels[
-        Math.floor(Math.random()*3)
+        vibrationIndex
     ];
 
-    const doorStatus =
-    Math.random() > 0.85
-    ? "Open"
-    : "Closed";
+}
 
-    const sealStatus =
-    Math.random() > 0.9
-    ? "Broken"
-    : "Intact";
+const doorStatus =
+Math.random() > 0.98
+? "Open"
+: "Closed";
 
-    const locations = [
-        "Singapore Port",
-        "Mumbai Port",
-        "Dubai Port",
-        "Rotterdam",
-        "Shanghai"
-    ];
+const sealStatus =
+Math.random() > 0.98
+? "Broken"
+: "Intact";
 
-    const location =
-    locations[
-        Math.floor(
-            Math.random()*locations.length
-        )
-    ];
+   if(Math.random() < 0.03){
 
-    const etaOptions = [
-        "1 Day",
-        "2 Days",
-        "3 Days",
-        "5 Days",
-        "7 Days"
-    ];
+    routeIndex =
+    (routeIndex + 1) %
+    route.length;
 
-    const eta =
-    etaOptions[
-        Math.floor(
-            Math.random()*etaOptions.length
-        )
-    ];
+    currentLocation =
+    route[routeIndex];
+
+}
+
+const location =
+currentLocation;
+    
+let eta = "7 Days";
+
+if(location === "Shanghai Port")
+    eta = "7 Days";
+
+if(location === "Singapore Port")
+    eta = "5 Days";
+
+if(location === "Mumbai Port")
+    eta = "3 Days";
+
+if(location === "Dubai Port")
+    eta = "2 Days";
+
+if(location === "Rotterdam Port")
+    eta = "Delivered";
 
     let risk = 0;
 
@@ -332,7 +410,7 @@ updateTelemetry();
 
 setInterval(
     updateTelemetry,
-    3000
+    15000
 );
 
 // Animation
