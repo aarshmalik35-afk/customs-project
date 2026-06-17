@@ -1,3 +1,4 @@
+alert("NEW SCRIPT RUNNING");
 import * as THREE from 'https://threejs.org/build/three.module.js';
 import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js';
 
