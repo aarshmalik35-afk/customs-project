@@ -1,4 +1,5 @@
 import * as THREE from 'https://threejs.org/build/three.module.js';
+import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js';
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x0b1f3a);
@@ -21,15 +22,14 @@ renderer.setSize(
     window.innerHeight
 );
 
-document.body.appendChild(
-    renderer.domElement
-);
+document.getElementById("container")
+    .appendChild(renderer.domElement);
 
 // Lighting
 const ambientLight =
 new THREE.AmbientLight(
     0xffffff,
-    4
+    5
 );
 
 scene.add(ambientLight);
@@ -37,7 +37,7 @@ scene.add(ambientLight);
 const directionalLight =
 new THREE.DirectionalLight(
     0xffffff,
-    2
+    3
 );
 
 directionalLight.position.set(
@@ -48,86 +48,140 @@ directionalLight.position.set(
 
 scene.add(directionalLight);
 
-// Ship Body
-const shipGeometry =
-new THREE.BoxGeometry(
-    2500,
-    3000,
-    7000
-);
+// Ship Variable
+let ship = null;
 
-const shipMaterial =
-new THREE.MeshStandardMaterial({
+// Load Ship
+const loader = new GLTFLoader();
 
-    color: 0x2E7D32, // GREEN
+loader.load(
 
-    metalness: 0.3,
+    './ship.glb',
 
-    roughness: 0.7
+    function(gltf){
 
-});
+        ship = gltf.scene;
 
-const ship =
-new THREE.Mesh(
-    shipGeometry,
-    shipMaterial
-);
+        scene.add(ship);
 
-scene.add(ship);
+        console.log("SHIP LOADED");
 
-// Simulated Telemetry
-let temperature = 22;
-let humidity = 60;
-let riskScore = 25;
+        const box =
+        new THREE.Box3()
+        .setFromObject(ship);
 
-// Update telemetry every 3 sec
-setInterval(() => {
+        const center =
+        box.getCenter(
+            new THREE.Vector3()
+        );
 
-    temperature =
-    Math.floor(
-        20 + Math.random() * 15
-    );
+        ship.position.sub(center);
 
-    humidity =
-    Math.floor(
-        50 + Math.random() * 30
-    );
+        ship.scale.set(
+            1,
+            1,
+            1
+        );
 
-    riskScore =
-    Math.floor(
-        Math.random() * 100
-    );
+    },
 
-    console.log(
-        "Temperature:",
-        temperature,
-        "Humidity:",
-        humidity,
-        "Risk:",
-        riskScore
-    );
+    undefined,
 
-    if(riskScore < 40){
+    function(error){
 
-        ship.material.color.set(
-            0x2E7D32
+        console.error(
+            "LOAD ERROR",
+            error
         );
 
     }
 
-    else if(riskScore < 70){
+);
 
-        ship.material.color.set(
-            0xF57C00
-        );
+// Telemetry Simulation
+setInterval(() => {
+
+    const temperature =
+    Math.floor(
+        20 + Math.random() * 15
+    );
+
+    const humidity =
+    Math.floor(
+        50 + Math.random() * 30
+    );
+
+    const risk =
+    Math.floor(
+        Math.random() * 100
+    );
+
+    document.getElementById("temp").innerText =
+    temperature;
+
+    document.getElementById("humidity").innerText =
+    humidity;
+
+    document.getElementById("risk").innerText =
+    risk;
+
+    let status = "Approved";
+
+    if(risk < 40){
+
+        status = "Approved";
+
+    }
+
+    else if(risk < 70){
+
+        status = "Manual Review";
 
     }
 
     else{
 
-        ship.material.color.set(
-            0xC62828
-        );
+        status = "High Risk";
+
+    }
+
+    document.getElementById("status").innerText =
+    status;
+
+    // Change ship color
+    if(ship){
+
+        ship.traverse((child)=>{
+
+            if(child.isMesh){
+
+                if(risk < 40){
+
+                    child.material.color.set(
+                        0x2E7D32
+                    );
+
+                }
+
+                else if(risk < 70){
+
+                    child.material.color.set(
+                        0xF57C00
+                    );
+
+                }
+
+                else{
+
+                    child.material.color.set(
+                        0xC62828
+                    );
+
+                }
+
+            }
+
+        });
 
     }
 
@@ -140,7 +194,11 @@ function animate(){
         animate
     );
 
-    ship.rotation.y += 0.002;
+    if(ship){
+
+        ship.rotation.y += 0.002;
+
+    }
 
     renderer.render(
         scene,
@@ -167,5 +225,7 @@ window.addEventListener(
             window.innerHeight
         );
 
+    }
+);
     }
 );
