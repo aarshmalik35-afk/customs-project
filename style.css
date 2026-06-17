@@ -2,17 +2,25 @@ body {
 
     margin: 0;
 
+    overflow: hidden;
+
     background: #0b1f3a;
 
-    color: white;
-
-    font-family: Arial;
+    font-family: Arial, sans-serif;
 
 }
 
-h1 {
+#header {
 
-    text-align: center;
+    position: absolute;
+
+    top: 10px;
+
+    left: 20px;
+
+    z-index: 10;
+
+    color: white;
 
 }
 
@@ -20,27 +28,42 @@ h1 {
 
     width: 100vw;
 
-    height: 90vh;
+    height: 100vh;
 
 }
-#telemetry{
 
-    position:absolute;
+#telemetry {
 
-    top:20px;
+    position: absolute;
 
-    right:20px;
+    top: 80px;
 
-    width:250px;
+    right: 20px;
 
-    padding:15px;
+    width: 260px;
 
-    background:rgba(0,0,0,0.7);
+    padding: 20px;
 
-    color:white;
+    background: rgba(0,0,0,0.7);
 
-    border-radius:10px;
+    border-radius: 12px;
 
-    font-family:Arial;
+    color: white;
+
+    z-index: 10;
+
+}
+
+#telemetry h2 {
+
+    margin-top: 0;
+
+}
+
+#telemetry p {
+
+    margin: 10px 0;
+
+    font-size: 16px;
 
 }
