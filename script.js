@@ -107,7 +107,7 @@ loader.load(
         );
 
         const scale =
-        2000 / maxDim;
+        6000 / maxDim;
 
         ship.scale.set(
             scale,
