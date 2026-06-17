@@ -133,22 +133,92 @@ loader.load(
 );
 
 // Telemetry
-function updateTelemetry() {
+function updateTelemetry(){
 
     const temperature =
-    Math.floor(
-        20 + Math.random() * 15
-    );
+    Math.floor(20 + Math.random()*20);
 
     const humidity =
-    Math.floor(
-        50 + Math.random() * 30
-    );
+    Math.floor(40 + Math.random()*50);
 
-    const risk =
-    Math.floor(
-        Math.random() * 100
-    );
+    const shockEvents =
+    Math.floor(Math.random()*10);
+
+    const tilt =
+    Math.floor(Math.random()*12);
+
+    const vibrationLevels =
+    ["Low","Medium","High"];
+
+    const vibration =
+    vibrationLevels[
+        Math.floor(Math.random()*3)
+    ];
+
+    const doorStatus =
+    Math.random() > 0.85
+    ? "Open"
+    : "Closed";
+
+    const sealStatus =
+    Math.random() > 0.9
+    ? "Broken"
+    : "Intact";
+
+    const locations = [
+        "Singapore Port",
+        "Dubai Port",
+        "Mumbai Port",
+        "Rotterdam",
+        "Shanghai"
+    ];
+
+    const location =
+    locations[
+        Math.floor(
+            Math.random()*locations.length
+        )
+    ];
+
+    let risk = 0;
+
+    if(temperature > 35)
+        risk += 15;
+
+    if(humidity > 80)
+        risk += 10;
+
+    if(shockEvents > 5)
+        risk += 25;
+
+    if(vibration === "High")
+        risk += 20;
+
+    if(vibration === "Medium")
+        risk += 10;
+
+    if(doorStatus === "Open")
+        risk += 30;
+
+    if(sealStatus === "Broken")
+        risk += 40;
+
+    if(tilt > 8)
+        risk += 15;
+
+    risk =
+    Math.min(risk,100);
+
+    let status =
+    "Approved";
+
+    if(risk >= 40)
+        status =
+        "Manual Review";
+
+    if(risk >= 70)
+        status =
+        "High Risk";
 
     document.getElementById("temp").textContent =
     temperature;
@@ -156,40 +226,37 @@ function updateTelemetry() {
     document.getElementById("humidity").textContent =
     humidity;
 
+    document.getElementById("shock").textContent =
+    shockEvents;
+
+    document.getElementById("vibration").textContent =
+    vibration;
+
+    document.getElementById("door").textContent =
+    doorStatus;
+
+    document.getElementById("seal").textContent =
+    sealStatus;
+
+    document.getElementById("tilt").textContent =
+    tilt;
+
+    document.getElementById("location").textContent =
+    location;
+
     document.getElementById("risk").textContent =
     risk;
-
-    let status = "Approved";
-
-    if (risk < 40) {
-
-        status = "Approved";
-
-    }
-
-    else if (risk < 70) {
-
-        status = "Manual Review";
-
-    }
-
-    else {
-
-        status = "High Risk";
-
-    }
 
     document.getElementById("status").textContent =
     status;
 
-    // Color ship
-    if (ship) {
+    if(ship){
 
-        ship.traverse((child) => {
+        ship.traverse((child)=>{
 
-            if (child.isMesh) {
+            if(child.isMesh){
 
-                if (risk < 40) {
+                if(risk < 40){
 
                     child.material.color.set(
                         0x2E7D32
@@ -197,7 +264,7 @@ function updateTelemetry() {
 
                 }
 
-                else if (risk < 70) {
+                else if(risk < 70){
 
                     child.material.color.set(
                         0xF57C00
@@ -205,7 +272,7 @@ function updateTelemetry() {
 
                 }
 
-                else {
+                else{
 
                     child.material.color.set(
                         0xC62828
