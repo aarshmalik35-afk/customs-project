@@ -4,268 +4,261 @@ import { GLTFLoader } from 'https://unpkg.com/three@0.160.0/examples/jsm/loaders
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x0b1f3a);
 
+// Camera
 const camera = new THREE.PerspectiveCamera(
-75,
-window.innerWidth / window.innerHeight,
-0.1,
-10000
+    75,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    10000
 );
 
-camera.position.set(0, 500, 8000);
+camera.position.set(0, 500, 4000);
 
+// Renderer
 const renderer = new THREE.WebGLRenderer({
-antialias:true
+    antialias: true
 });
 
 renderer.setSize(
-window.innerWidth,
-window.innerHeight
+    window.innerWidth,
+    window.innerHeight
 );
 
 document
-.getElementById("container")
-.appendChild(renderer.domElement);
+    .getElementById("container")
+    .appendChild(renderer.domElement);
 
-scene.add(
+// Lights
+const ambientLight =
 new THREE.AmbientLight(
-0xffffff,
-5
-)
+    0xffffff,
+    5
 );
 
-let ship;
+scene.add(ambientLight);
 
-// ===== LOAD YOUR GLB =====
+const directionalLight =
+new THREE.DirectionalLight(
+    0xffffff,
+    3
+);
 
-const loaderScript = document.createElement("script");
+directionalLight.position.set(
+    3000,
+    3000,
+    3000
+);
 
-loaderScript.type = "module";
+scene.add(directionalLight);
 
-loaderScript.textContent = `
-
-import { GLTFLoader }
-from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js';
+// Ship
+let ship = null;
 
 const loader = new GLTFLoader();
 
 loader.load(
 
-'./ship.glb',
+    './ship.glb',
 
-(gltf)=>{
+    function(gltf){
 
-window.shipModel =
-gltf.scene;
+        ship = gltf.scene;
 
-window.dispatchEvent(
-new Event('shipLoaded')
+        scene.add(ship);
+
+        // Center model
+        const box =
+        new THREE.Box3()
+        .setFromObject(ship);
+
+        const center =
+        box.getCenter(
+            new THREE.Vector3()
+        );
+
+        ship.position.sub(center);
+
+        // Auto scale
+        const size =
+        box.getSize(
+            new THREE.Vector3()
+        );
+
+        const maxDim =
+        Math.max(
+            size.x,
+            size.y,
+            size.z
+        );
+
+        const scale =
+        2000 / maxDim;
+
+        ship.scale.set(
+            scale,
+            scale,
+            scale
+        );
+
+        console.log("SHIP LOADED");
+
+    },
+
+    undefined,
+
+    function(error){
+
+        console.error(
+            "GLB ERROR:",
+            error
+        );
+
+    }
+
 );
 
-},
+// Telemetry
+function updateTelemetry(){
 
-undefined,
+    const temperature =
+    Math.floor(
+        20 + Math.random() * 15
+    );
 
-(err)=>{
+    const humidity =
+    Math.floor(
+        50 + Math.random() * 30
+    );
 
-console.error(
-'GLB ERROR',
-err
-);
+    const risk =
+    Math.floor(
+        Math.random() * 100
+    );
+
+    document.getElementById(
+        "temp"
+    ).textContent = temperature;
+
+    document.getElementById(
+        "humidity"
+    ).textContent = humidity;
+
+    document.getElementById(
+        "risk"
+    ).textContent = risk;
+
+    let status = "Approved";
+
+    if(risk < 40){
+
+        status = "Approved";
+
+    }
+
+    else if(risk < 70){
+
+        status = "Manual Review";
+
+    }
+
+    else{
+
+        status = "High Risk";
+
+    }
+
+    document.getElementById(
+        "status"
+    ).textContent = status;
+
+    // Color ship based on risk
+    if(ship){
+
+        ship.traverse((child)=>{
+
+            if(child.isMesh){
+
+                if(risk < 40){
+
+                    child.material.color.set(
+                        0x2E7D32
+                    );
+
+                }
+
+                else if(risk < 70){
+
+                    child.material.color.set(
+                        0xF57C00
+                    );
+
+                }
+
+                else{
+
+                    child.material.color.set(
+                        0xC62828
+                    );
+
+                }
+
+            }
+
+        });
+
+    }
 
 }
 
+updateTelemetry();
+
+setInterval(
+    updateTelemetry,
+    3000
 );
 
-`;
-
-document.body.appendChild(
-loaderScript
-);
-
-window.addEventListener(
-
-'shipLoaded',
-
-()=>{
-
-ship = window.shipModel;
-
-scene.add(ship);
-
-const box =
-new THREE.Box3()
-.setFromObject(ship);
-
-const center =
-box.getCenter(
-new THREE.Vector3()
-);
-
-ship.position.sub(center);
-
-ship.scale.set(
-1,
-1,
-1
-);
-
-console.log(
-'SHIP ADDED'
-);
-
-}
-
-);
-
-// ===== TELEMETRY =====
-
-setInterval(()=>{
-
-const temperature =
-Math.floor(
-20 + Math.random()*15
-);
-
-const humidity =
-Math.floor(
-50 + Math.random()*30
-);
-
-const risk =
-Math.floor(
-Math.random()*100
-);
-
-document.getElementById(
-'temp'
-).textContent =
-temperature;
-
-document.getElementById(
-'humidity'
-).textContent =
-humidity;
-
-document.getElementById(
-'risk'
-).textContent =
-risk;
-
-if(risk < 40){
-
-document.getElementById(
-'status'
-).textContent =
-'Approved';
-
-if(ship){
-
-ship.traverse((child)=>{
-
-if(child.isMesh){
-
-child.material.color.set(
-0x2E7D32
-);
-
-}
-
-});
-
-}
-
-}
-
-else if(risk < 70){
-
-document.getElementById(
-'status'
-).textContent =
-'Manual Review';
-
-if(ship){
-
-ship.traverse((child)=>{
-
-if(child.isMesh){
-
-child.material.color.set(
-0xF57C00
-);
-
-}
-
-});
-
-}
-
-}
-
-else{
-
-document.getElementById(
-'status'
-).textContent =
-'High Risk';
-
-if(ship){
-
-ship.traverse((child)=>{
-
-if(child.isMesh){
-
-child.material.color.set(
-0xC62828
-);
-
-}
-
-});
-
-}
-
-}
-
-},3000);
-
-// ===== ANIMATION =====
-
+// Animation
 function animate(){
 
-requestAnimationFrame(
-animate
-);
+    requestAnimationFrame(
+        animate
+    );
 
-if(ship){
+    if(ship){
 
-ship.rotation.y += 0.002;
+        ship.rotation.y += 0.002;
 
-}
+    }
 
-renderer.render(
-scene,
-camera
-);
+    renderer.render(
+        scene,
+        camera
+    );
 
 }
 
 animate();
 
-// ===== RESIZE =====
-
+// Resize
 window.addEventListener(
-'resize',
-()=>{
 
-camera.aspect =
-window.innerWidth /
-window.innerHeight;
+    'resize',
 
-camera.updateProjectionMatrix();
+    ()=>{
 
-renderer.setSize(
-window.innerWidth,
-window.innerHeight
+        camera.aspect =
+        window.innerWidth /
+        window.innerHeight;
+
+        camera.updateProjectionMatrix();
+
+        renderer.setSize(
+            window.innerWidth,
+            window.innerHeight
+        );
+
+    }
+
 );
 
 }
