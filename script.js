@@ -1,232 +1,148 @@
-alert("NEW SCRIPT RUNNING");
 import * as THREE from 'https://threejs.org/build/three.module.js';
-import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js';
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x0b1f3a);
 
 const camera = new THREE.PerspectiveCamera(
-    75,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    10000
+75,
+window.innerWidth/window.innerHeight,
+0.1,
+10000
 );
 
-camera.position.set(0, 500, 8000);
+camera.position.set(
+0,
+500,
+8000
+);
 
 const renderer = new THREE.WebGLRenderer({
-    antialias: true
+antialias:true
 });
 
 renderer.setSize(
-    window.innerWidth,
-    window.innerHeight
+window.innerWidth,
+window.innerHeight
 );
 
-document.getElementById("container")
-    .appendChild(renderer.domElement);
+document
+.getElementById("container")
+.appendChild(
+renderer.domElement
+);
 
-// Lighting
-const ambientLight =
+scene.add(
 new THREE.AmbientLight(
-    0xffffff,
-    5
+0xffffff,
+5
+)
 );
 
-scene.add(ambientLight);
-
-const directionalLight =
-new THREE.DirectionalLight(
-    0xffffff,
-    3
+const geometry =
+new THREE.BoxGeometry(
+2500,
+3000,
+7000
 );
 
-directionalLight.position.set(
-    5000,
-    5000,
-    5000
+const material =
+new THREE.MeshStandardMaterial({
+
+color:0x2E7D32
+
+});
+
+const ship =
+new THREE.Mesh(
+geometry,
+material
 );
 
-scene.add(directionalLight);
+scene.add(ship);
 
-// Ship Variable
-let ship = null;
+setInterval(()=>{
 
-// Load Ship
-const loader = new GLTFLoader();
-
-loader.load(
-
-    './ship.glb',
-
-    function(gltf){
-
-        ship = gltf.scene;
-
-        scene.add(ship);
-
-        console.log("SHIP LOADED");
-
-        const box =
-        new THREE.Box3()
-        .setFromObject(ship);
-
-        const center =
-        box.getCenter(
-            new THREE.Vector3()
-        );
-
-        ship.position.sub(center);
-
-        ship.scale.set(
-            1,
-            1,
-            1
-        );
-
-    },
-
-    undefined,
-
-    function(error){
-
-        console.error(
-            "LOAD ERROR",
-            error
-        );
-
-    }
-
+const temperature =
+Math.floor(
+20 + Math.random()*15
 );
 
-// Telemetry Simulation
-setInterval(() => {
+const humidity =
+Math.floor(
+50 + Math.random()*30
+);
 
-    const temperature =
-    Math.floor(
-        20 + Math.random() * 15
-    );
+const risk =
+Math.floor(
+Math.random()*100
+);
 
-    const humidity =
-    Math.floor(
-        50 + Math.random() * 30
-    );
+document.getElementById(
+"temp"
+).textContent = temperature;
 
-    const risk =
-    Math.floor(
-        Math.random() * 100
-    );
+document.getElementById(
+"humidity"
+).textContent = humidity;
 
-    document.getElementById("temp").innerText =
-    temperature;
+document.getElementById(
+"risk"
+).textContent = risk;
 
-    document.getElementById("humidity").innerText =
-    humidity;
+if(risk < 40){
 
-    document.getElementById("risk").innerText =
-    risk;
+document.getElementById(
+"status"
+).textContent =
+"Approved";
 
-    let status = "Approved";
+ship.material.color.set(
+0x2E7D32
+);
 
-    if(risk < 40){
+}
 
-        status = "Approved";
+else if(risk < 70){
 
-    }
+document.getElementById(
+"status"
+).textContent =
+"Manual Review";
 
-    else if(risk < 70){
+ship.material.color.set(
+0xF57C00
+);
 
-        status = "Manual Review";
+}
 
-    }
+else{
 
-    else{
+document.getElementById(
+"status"
+).textContent =
+"High Risk";
 
-        status = "High Risk";
+ship.material.color.set(
+0xC62828
+);
 
-    }
-
-    document.getElementById("status").innerText =
-    status;
-
-    // Change ship color
-    if(ship){
-
-        ship.traverse((child)=>{
-
-            if(child.isMesh){
-
-                if(risk < 40){
-
-                    child.material.color.set(
-                        0x2E7D32
-                    );
-
-                }
-
-                else if(risk < 70){
-
-                    child.material.color.set(
-                        0xF57C00
-                    );
-
-                }
-
-                else{
-
-                    child.material.color.set(
-                        0xC62828
-                    );
-
-                }
-
-            }
-
-        });
-
-    }
+}
 
 },3000);
 
-// Animation
 function animate(){
 
-    requestAnimationFrame(
-        animate
-    );
+requestAnimationFrame(
+animate
+);
 
-    if(ship){
+ship.rotation.y += 0.002;
 
-        ship.rotation.y += 0.002;
-
-    }
-
-    renderer.render(
-        scene,
-        camera
-    );
+renderer.render(
+scene,
+camera
+);
 
 }
 
 animate();
-
-// Resize
-window.addEventListener(
-    'resize',
-    () => {
-
-        camera.aspect =
-        window.innerWidth /
-        window.innerHeight;
-
-        camera.updateProjectionMatrix();
-
-        renderer.setSize(
-            window.innerWidth,
-            window.innerHeight
-        );
-
-    }
-);
-    }
-);
