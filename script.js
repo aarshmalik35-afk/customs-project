@@ -1,3 +1,4 @@
+console.log("SCRIPT VERSION 2");
 import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js?module';
 import { GLTFLoader } from 'https://unpkg.com/three@0.160.0/examples/jsm/loaders/GLTFLoader.js?module';
 
