@@ -260,6 +260,3 @@ window.addEventListener(
     }
 
 );
-
-}
-);
