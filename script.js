@@ -59,12 +59,30 @@ const loader = new GLTFLoader();
 
 loader.load(
 
-    './ship.glb',
+'./ship.glb',
 
-    function(gltf){
+function(gltf){
 
-        ship = gltf.scene;
+    ship = gltf.scene;
 
+    ship.traverse((child)=>{
+
+        if(child.isMesh){
+
+            child.material =
+            new THREE.MeshStandardMaterial({
+                color: 0xffffff
+            });
+
+        }
+
+    });
+
+    scene.add(ship);
+
+    console.log("SHIP LOADED");
+
+},
         scene.add(ship);
 
         // Center model
