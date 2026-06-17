@@ -1,7 +1,9 @@
-console.log("SCRIPT VERSION 2");
 import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js?module';
 import { GLTFLoader } from 'https://unpkg.com/three@0.160.0/examples/jsm/loaders/GLTFLoader.js?module';
 
+console.log("CUSTOMS DIGITAL TWIN STARTING");
+
+// Scene
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x0b1f3a);
 
@@ -30,16 +32,14 @@ document
     .appendChild(renderer.domElement);
 
 // Lights
-const ambientLight =
-new THREE.AmbientLight(
+const ambientLight = new THREE.AmbientLight(
     0xffffff,
     5
 );
 
 scene.add(ambientLight);
 
-const directionalLight =
-new THREE.DirectionalLight(
+const directionalLight = new THREE.DirectionalLight(
     0xffffff,
     3
 );
@@ -52,43 +52,39 @@ directionalLight.position.set(
 
 scene.add(directionalLight);
 
-// Ship
+// Ship variable
 let ship = null;
 
+// Load GLB
 const loader = new GLTFLoader();
 
 loader.load(
 
-'./ship.glb',
+    "./ship.glb",
 
-function(gltf){
+    (gltf) => {
 
-    ship = gltf.scene;
+        ship = gltf.scene;
 
-    ship.traverse((child)=>{
+        // Replace broken materials
+        ship.traverse((child) => {
 
-        if(child.isMesh){
+            if (child.isMesh) {
 
-            child.material =
-            new THREE.MeshStandardMaterial({
-                color: 0xffffff
-            });
+                child.material =
+                new THREE.MeshStandardMaterial({
+                    color: 0xffffff
+                });
 
-        }
+            }
 
-    });
+        });
 
-    scene.add(ship);
-
-    console.log("SHIP LOADED");
-
-},
         scene.add(ship);
 
         // Center model
         const box =
-        new THREE.Box3()
-        .setFromObject(ship);
+        new THREE.Box3().setFromObject(ship);
 
         const center =
         box.getCenter(
@@ -125,7 +121,7 @@ function(gltf){
 
     undefined,
 
-    function(error){
+    (error) => {
 
         console.error(
             "GLB ERROR:",
@@ -137,7 +133,7 @@ function(gltf){
 );
 
 // Telemetry
-function updateTelemetry(){
+function updateTelemetry() {
 
     const temperature =
     Math.floor(
@@ -154,50 +150,46 @@ function updateTelemetry(){
         Math.random() * 100
     );
 
-    document.getElementById(
-        "temp"
-    ).textContent = temperature;
+    document.getElementById("temp").textContent =
+    temperature;
 
-    document.getElementById(
-        "humidity"
-    ).textContent = humidity;
+    document.getElementById("humidity").textContent =
+    humidity;
 
-    document.getElementById(
-        "risk"
-    ).textContent = risk;
+    document.getElementById("risk").textContent =
+    risk;
 
     let status = "Approved";
 
-    if(risk < 40){
+    if (risk < 40) {
 
         status = "Approved";
 
     }
 
-    else if(risk < 70){
+    else if (risk < 70) {
 
         status = "Manual Review";
 
     }
 
-    else{
+    else {
 
         status = "High Risk";
 
     }
 
-    document.getElementById(
-        "status"
-    ).textContent = status;
+    document.getElementById("status").textContent =
+    status;
 
-    // Color ship based on risk
-    if(ship){
+    // Color ship
+    if (ship) {
 
-        ship.traverse((child)=>{
+        ship.traverse((child) => {
 
-            if(child.isMesh){
+            if (child.isMesh) {
 
-                if(risk < 40){
+                if (risk < 40) {
 
                     child.material.color.set(
                         0x2E7D32
@@ -205,7 +197,7 @@ function updateTelemetry(){
 
                 }
 
-                else if(risk < 70){
+                else if (risk < 70) {
 
                     child.material.color.set(
                         0xF57C00
@@ -213,7 +205,7 @@ function updateTelemetry(){
 
                 }
 
-                else{
+                else {
 
                     child.material.color.set(
                         0xC62828
@@ -237,13 +229,13 @@ setInterval(
 );
 
 // Animation
-function animate(){
+function animate() {
 
     requestAnimationFrame(
         animate
     );
 
-    if(ship){
+    if (ship) {
 
         ship.rotation.y += 0.002;
 
@@ -260,10 +252,8 @@ animate();
 
 // Resize
 window.addEventListener(
-
-    'resize',
-
-    ()=>{
+    "resize",
+    () => {
 
         camera.aspect =
         window.innerWidth /
@@ -277,5 +267,4 @@ window.addEventListener(
         );
 
     }
-
 );
