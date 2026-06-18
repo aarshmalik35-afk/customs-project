@@ -184,135 +184,90 @@ loader.load(
 
 );
 
-// Telemetry
 function updateTelemetry(){
 
-temperature +=
-Math.floor(Math.random()*3) - 1;
+// Environmental readings
+temperature += Math.floor(Math.random()*3) - 1;
+humidity += Math.floor(Math.random()*3) - 1;
 
-humidity +=
-Math.floor(Math.random()*3) - 1;
-
-temperature =
-Math.max(
-20,
-Math.min(40, temperature)
-);
-
-humidity =
-Math.max(
-40,
-Math.min(90, humidity)
-);
+temperature = Math.max(20, Math.min(40, temperature));
+humidity = Math.max(40, Math.min(90, humidity));
 
 // Shock events accumulate slowly
 if(Math.random() < 0.03){
-
     shockEvents++;
-
 }
 
-// Tilt changes slowly
-tilt +=
-Math.floor(Math.random()*3) - 1;
+// Tilt changes gradually
+tilt += Math.floor(Math.random()*3) - 1;
+tilt = Math.max(0, Math.min(12, tilt));
 
-tilt =
-Math.max(
-0,
-Math.min(12, tilt)
-);
-
-// Vibration changes rarely
+// Vibration changes occasionally
 if(Math.random() < 0.10){
 
     const direction =
-    Math.random() < 0.5
-    ? -1
-    : 1;
+    Math.random() < 0.5 ? -1 : 1;
 
     vibrationIndex += direction;
 
     vibrationIndex =
     Math.max(
         0,
-        Math.min(
-            2,
-            vibrationIndex
-        )
+        Math.min(2, vibrationIndex)
     );
 
     vibration =
-    vibrationLevels[
-        vibrationIndex
-    ];
-
+    vibrationLevels[vibrationIndex];
 }
 
-// Door opens very rarely
+// Door logic
 if(
     doorStatus === "Closed" &&
     Math.random() < 0.01
 ){
-
     doorStatus = "Open";
-
 }
-
-// Door closes again occasionally
 else if(
     doorStatus === "Open" &&
     Math.random() < 0.30
 ){
-
     doorStatus = "Closed";
-
 }
 
-// Seal breaches are extremely rare
+// Seal breach logic
 if(
     sealStatus === "Intact" &&
     Math.random() < 0.005
 ){
-
     sealStatus = "Broken";
-
 }
 
-   if(Math.random() < 0.03){
+// Route movement
+if(Math.random() < 0.03){
 
     routeIndex =
-    (routeIndex + 1) %
-    route.length;
+    Math.min(
+        routeIndex + 1,
+        route.length - 1
+    );
 
     currentLocation =
     route[routeIndex];
-
 }
 
-const location =
-currentLocation;
+const location = currentLocation;
 
+// Voyage Progress
 let progress = 0;
 
-if(location === "Shanghai Port")
-    progress = 0;
+if(routeIndex === 0) progress = 0;
+if(routeIndex === 1) progress = 25;
+if(routeIndex === 2) progress = 50;
+if(routeIndex === 3) progress = 75;
+if(routeIndex === 4) progress = 100;
 
-if(location === "Singapore Port")
-    progress = 25;
-
-if(location === "Mumbai Port")
-    progress = 50;
-
-if(location === "Dubai Port")
-    progress = 75;
-
-if(location === "Rotterdam Port")
-    progress = 100;
-    
+// ETA
 let eta = "7 Days";
-
-if(location === "Shanghai Port")
-    eta = "7 Days";
 
 if(location === "Singapore Port")
     eta = "5 Days";
@@ -326,109 +281,109 @@ if(location === "Dubai Port")
 if(location === "Rotterdam Port")
     eta = "Delivered";
 
-    let risk = 0;
+// Risk Engine
+let risk = 0;
 
-    if(temperature > 35) risk += 15;
-    if(humidity > 80) risk += 10;
-    if(shockEvents > 5) risk += 25;
-    if(vibration === "Medium") risk += 10;
-    if(vibration === "High") risk += 20;
-    if(doorStatus === "Open") risk += 30;
-    if(sealStatus === "Broken") risk += 40;
-    if(tilt > 8) risk += 15;
+if(temperature > 35) risk += 15;
+if(humidity > 80) risk += 10;
+if(shockEvents > 5) risk += 25;
+if(vibration === "Medium") risk += 10;
+if(vibration === "High") risk += 20;
+if(doorStatus === "Open") risk += 30;
+if(sealStatus === "Broken") risk += 40;
+if(tilt > 8) risk += 15;
 
-    risk = Math.min(risk,100);
+risk = Math.min(risk,100);
 
-    let status = "Approved";
+// Customs Status
+let status = "Approved";
 
-    if(risk >= 40)
-        status = "Manual Review";
+if(risk >= 40)
+    status = "Manual Review";
 
-    if(risk >= 70)
-        status = "High Risk";
+if(risk >= 70)
+    status = "High Risk";
 
-    const sealAlert =
-    sealStatus === "Broken"
-    ? "YES"
-    : "NO";
+// Seal Alert
+const sealAlert =
+sealStatus === "Broken"
+? "YES"
+: "NO";
 
-    let alertMessage =
+// AI Alert Engine
+let alertMessage =
 "✓ Container operating normally";
 
 if(risk >= 40){
-
     alertMessage =
     "⚠ Manual customs inspection recommended";
-
 }
 
 if(vibration === "High"){
-
     alertMessage =
     "⚠ High vibration detected";
-
 }
 
 if(tilt > 8){
-
     alertMessage =
     "⚠ Excessive container tilt";
-
 }
 
 if(doorStatus === "Open"){
-
     alertMessage =
     "⚠ Container door unexpectedly open";
-
 }
 
 if(sealStatus === "Broken"){
-
     alertMessage =
     "⚠ Seal breach detected";
-
 }
 
-    document.getElementById("temp").textContent =
-    temperature;
+// Update UI
+document.getElementById("temp").textContent =
+temperature;
 
-    document.getElementById("humidity").textContent =
-    humidity;
+document.getElementById("humidity").textContent =
+humidity;
 
-    document.getElementById("shock").textContent =
-    shockEvents;
+document.getElementById("shock").textContent =
+shockEvents;
 
-    document.getElementById("vibration").textContent =
-    vibration;
+document.getElementById("vibration").textContent =
+vibration;
 
-    document.getElementById("door").textContent =
-    doorStatus;
+document.getElementById("door").textContent =
+doorStatus;
 
-    document.getElementById("seal").textContent =
-    sealStatus;
+document.getElementById("seal").textContent =
+sealStatus;
 
-    document.getElementById("tilt").textContent =
-    tilt;
+document.getElementById("tilt").textContent =
+tilt;
 
-    document.getElementById("location").textContent =
-    location;
+document.getElementById("location").textContent =
+location;
 
-    document.getElementById("eta").textContent =
-    eta;
+document.getElementById("eta").textContent =
+eta;
 
-    document.getElementById("risk").textContent =
-    risk;
+document.getElementById("risk").textContent =
+risk;
 
-    document.getElementById("status").textContent =
-    status;
+document.getElementById("status").textContent =
+status;
 
-    document.getElementById(
-    "alertMessage"
-).textContent =
+document.getElementById("lastUpdated").textContent =
+new Date().toLocaleTimeString();
+
+document.getElementById("sealAlert").textContent =
+sealAlert;
+
+document.getElementById("alertMessage").textContent =
 alertMessage;
 
-    document.getElementById(
+// Progress Bar
+document.getElementById(
     "progressFill"
 ).style.width =
 progress + "%";
@@ -436,106 +391,91 @@ progress + "%";
 document.getElementById(
     "progressText"
 ).textContent =
-progress + "%";
+progress + "% Complete";
 
-    for(let i = 0; i < route.length; i++){
+// Route Tracker
+for(let i=0;i<route.length;i++){
+
+    const routeItem =
+    document.getElementById(
+        "route" + i
+    );
+
+    if(!routeItem) continue;
 
     if(i < routeIndex){
 
-        document.getElementById(
-            "route" + i
-        ).innerHTML =
+        routeItem.innerHTML =
         "✓ " + route[i];
 
     }
-
     else if(i === routeIndex){
 
-        document.getElementById(
-            "route" + i
-        ).innerHTML =
+        routeItem.innerHTML =
         "➜ " + route[i];
 
     }
-
     else{
 
-        document.getElementById(
-            "route" + i
-        ).innerHTML =
+        routeItem.innerHTML =
         "○ " + route[i];
 
     }
-
 }
 
-    document.getElementById("lastUpdated").textContent =
-    new Date().toLocaleTimeString();
+// Seal Alert Color
+const alertElement =
+document.getElementById(
+    "sealAlert"
+);
 
-    document.getElementById("sealAlert").textContent =
-    sealAlert;
+if(sealAlert === "YES"){
 
-    const alertElement =
-    document.getElementById(
-        "sealAlert"
-    );
+    alertElement.style.color =
+    "#ff4d4d";
 
-    if(sealAlert === "YES"){
+}else{
 
-        alertElement.style.color =
-        "#ff4d4d";
+    alertElement.style.color =
+    "#4CAF50";
+}
 
-    }
-    else{
+// Ship Color
+if(ship){
 
-        alertElement.style.color =
-        "#4CAF50";
+    ship.traverse((child)=>{
 
-    }
+        if(child.isMesh){
 
-    if(ship){
+            if(risk < 40){
 
-        ship.traverse((child)=>{
+                child.material.color.set(
+                    0x4CAF50
+                );
 
-            if(child.isMesh){
+            }
+            else if(risk < 70){
 
-                if(risk < 40){
+                child.material.color.set(
+                    0xFF9800
+                );
 
-                    child.material.color.set(
-                        0x2E7D32
-                    );
+            }
+            else{
 
-                }
-
-                else if(risk < 70){
-
-                    child.material.color.set(
-                        0xF57C00
-                    );
-
-                }
-
-                else{
-
-                    child.material.color.set(
-                        0xC62828
-                    );
-
-                }
+                child.material.color.set(
+                    0xF44336
+                );
 
             }
 
-        });
+        }
 
-    }
+    });
 
 }
-updateTelemetry();
 
-setInterval(
-    updateTelemetry,
-    15000
-);
+}
 
 // Animation
 function animate() {
