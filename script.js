@@ -15,7 +15,7 @@ const camera = new THREE.PerspectiveCamera(
     10000
 );
 
-camera.position.set(0, 500, 4000);
+camera.position.set(0, 700, 5500);
 
 // Renderer
 const renderer = new THREE.WebGLRenderer({
@@ -142,7 +142,7 @@ loader.load(
         );
 
         ship.position.sub(center);
-        ship.position.x = -1200;
+        ship.position.x = -500;
         ship.position.y = -200;
 
         // Auto scale
