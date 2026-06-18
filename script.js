@@ -457,11 +457,35 @@ if(sealAlert === "YES"){
 // Ship Color
 if(ship){
 
+    console.log("Risk:", risk);
+
     ship.traverse((child)=>{
 
         if(child.isMesh){
 
-            // ship color logic
+            console.log(child.material);
+
+            if(risk < 40){
+
+                child.material.color.set(
+                    0x4CAF50
+                );
+
+            }
+            else if(risk < 70){
+
+                child.material.color.set(
+                    0xFF9800
+                );
+
+            }
+            else{
+
+                child.material.color.set(
+                    0xF44336
+                );
+
+            }
 
         }
 
