@@ -424,6 +424,18 @@ sealAlert;
 document.getElementById("alertMessage").textContent =
 alertMessage;
 
+document.getElementById(
+    "healthScore"
+).textContent =
+healthScore;
+
+document.getElementById(
+    "riskTrend"
+).textContent =
+riskHistory.join(
+    " → "
+);
+
 // Progress Bar
 document.getElementById(
     "progressFill"
@@ -482,6 +494,30 @@ if(sealAlert === "YES"){
     "#4CAF50";
 }
 
+const healthElement =
+document.getElementById(
+    "healthScore"
+);
+
+if(healthScore >= 80){
+
+    healthElement.style.color =
+    "#4CAF50";
+
+}
+else if(healthScore >= 50){
+
+    healthElement.style.color =
+    "#FF9800";
+
+}
+else{
+
+    healthElement.style.color =
+    "#F44336";
+
+}
+    
 // Ship Color
 if(ship){
 
