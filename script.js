@@ -291,6 +291,23 @@ if(
 
 const location =
 currentLocation;
+
+let progress = 0;
+
+if(location === "Shanghai Port")
+    progress = 0;
+
+if(location === "Singapore Port")
+    progress = 25;
+
+if(location === "Mumbai Port")
+    progress = 50;
+
+if(location === "Dubai Port")
+    progress = 75;
+
+if(location === "Rotterdam Port")
+    progress = 100;
     
 let eta = "7 Days";
 
@@ -335,6 +352,44 @@ if(location === "Rotterdam Port")
     ? "YES"
     : "NO";
 
+    let alertMessage =
+"✓ Container operating normally";
+
+if(risk >= 40){
+
+    alertMessage =
+    "⚠ Manual customs inspection recommended";
+
+}
+
+if(vibration === "High"){
+
+    alertMessage =
+    "⚠ High vibration detected";
+
+}
+
+if(tilt > 8){
+
+    alertMessage =
+    "⚠ Excessive container tilt";
+
+}
+
+if(doorStatus === "Open"){
+
+    alertMessage =
+    "⚠ Container door unexpectedly open";
+
+}
+
+if(sealStatus === "Broken"){
+
+    alertMessage =
+    "⚠ Seal breach detected";
+
+}
+
     document.getElementById("temp").textContent =
     temperature;
 
@@ -367,6 +422,52 @@ if(location === "Rotterdam Port")
 
     document.getElementById("status").textContent =
     status;
+
+    document.getElementById(
+    "alertMessage"
+).textContent =
+alertMessage;
+
+    document.getElementById(
+    "progressFill"
+).style.width =
+progress + "%";
+
+document.getElementById(
+    "progressText"
+).textContent =
+progress + "%";
+
+    for(let i = 0; i < route.length; i++){
+
+    if(i < routeIndex){
+
+        document.getElementById(
+            "route" + i
+        ).innerHTML =
+        "✓ " + route[i];
+
+    }
+
+    else if(i === routeIndex){
+
+        document.getElementById(
+            "route" + i
+        ).innerHTML =
+        "➜ " + route[i];
+
+    }
+
+    else{
+
+        document.getElementById(
+            "route" + i
+        ).innerHTML =
+        "○ " + route[i];
+
+    }
+
+}
 
     document.getElementById("lastUpdated").textContent =
     new Date().toLocaleTimeString();
