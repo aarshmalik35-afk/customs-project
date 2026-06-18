@@ -185,6 +185,7 @@ loader.load(
 );
 
 function updateTelemetry(){
+console.log("Telemetry Update Fired");
 
 // Environmental readings
 temperature += Math.floor(Math.random()*3) - 1;
@@ -447,27 +448,7 @@ if(ship){
 
         if(child.isMesh){
 
-            if(risk < 40){
-
-                child.material.color.set(
-                    0x4CAF50
-                );
-
-            }
-            else if(risk < 70){
-
-                child.material.color.set(
-                    0xFF9800
-                );
-
-            }
-            else{
-
-                child.material.color.set(
-                    0x2E7D32
-                );
-
-            }
+            // ship color logic
 
         }
 
@@ -475,7 +456,14 @@ if(ship){
 
 }
 
-}
+} // END updateTelemetry
+
+updateTelemetry();
+
+setInterval(
+    updateTelemetry,
+    15000
+);
 
 // Animation
 function animate() {
