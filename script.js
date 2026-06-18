@@ -132,6 +132,19 @@ loader.load(
 
         scene.add(ship);
 
+        ship.traverse((child)=>{
+
+    if(child.isMesh){
+
+        child.material =
+        new THREE.MeshStandardMaterial({
+            color: 0xff0000
+        });
+
+    }
+
+});  
+        
         // Center model
         const box =
         new THREE.Box3().setFromObject(ship);
