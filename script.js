@@ -464,7 +464,7 @@ if(ship){
             else{
 
                 child.material.color.set(
-                    0xF44336
+                    0x2E7D32
                 );
 
             }
