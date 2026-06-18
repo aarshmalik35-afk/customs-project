@@ -352,33 +352,105 @@ sealStatus === "Broken"
 ? "YES"
 : "NO";
 
-// AI Alert Engine
+// =========================
+// AI ALERT ENGINE
+// =========================
+
 let alertMessage =
-"✓ Container operating normally";
+"✓ AI Status: Shipment operating normally";
 
-if(risk >= 40){
+// Temperature Alert
+if(temperature > 35){
+
     alertMessage =
-    "⚠ Manual customs inspection recommended";
+    "⚠ AI Alert: Cargo temperature outside safe range";
+
 }
 
+// Humidity Alert
+if(humidity > 80){
+
+    alertMessage =
+    "⚠ AI Alert: Excess humidity detected";
+
+}
+
+// High Vibration
 if(vibration === "High"){
+
     alertMessage =
-    "⚠ High vibration detected";
+    "⚠ AI Alert: Excessive vibration detected";
+
 }
 
+// Excessive Tilt
 if(tilt > 8){
+
     alertMessage =
-    "⚠ Excessive container tilt";
+    "⚠ AI Prediction: Cargo stability risk";
+
 }
 
+// Shock Alert
+if(shockEvents > 8){
+
+    alertMessage =
+    "⚠ AI Prediction: Shipment delay risk increasing";
+
+}
+
+// Route Anomaly
+if(
+    location === "Dubai Port" &&
+    shockEvents > 5
+){
+
+    alertMessage =
+    "⚠ AI Alert: Route anomaly requires review";
+
+}
+
+// Customs Inspection Prediction
+if(risk >= 50){
+
+    alertMessage =
+    "⚠ AI Prediction: Customs inspection likely at next port";
+
+}
+
+// Container Health Alert
+if(healthScore < 50){
+
+    alertMessage =
+    "🚨 AI Alert: Container health critically low";
+
+}
+
+// Door Open Alert
 if(doorStatus === "Open"){
+
     alertMessage =
-    "⚠ Container door unexpectedly open";
+    "🚨 AI Alert: Container door unexpectedly open";
+
 }
 
+// Seal Breach Alert
 if(sealStatus === "Broken"){
+
     alertMessage =
-    "⚠ Seal breach detected";
+    "🚨 AI Alert: Potential seal tampering detected";
+
+}
+
+// Critical Combined Event
+if(
+    sealStatus === "Broken" &&
+    doorStatus === "Open"
+){
+
+    alertMessage =
+    "🚨 CRITICAL: Possible container breach detected";
+
 }
 
 // Update UI
@@ -421,7 +493,9 @@ new Date().toLocaleTimeString();
 document.getElementById("sealAlert").textContent =
 sealAlert;
 
-document.getElementById("alertMessage").textContent =
+document.getElementById(
+    "alertMessage"
+).textContent =
 alertMessage;
 
 document.getElementById(
