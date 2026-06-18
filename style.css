@@ -23,7 +23,7 @@ body{
     top:20px;
     right:20px;
 
-    width:320px;
+    width:340px;
     max-height:90vh;
 
     overflow-y:auto;
@@ -40,6 +40,11 @@ body{
 
     box-shadow:
     0 0 20px rgba(0,0,0,0.4);
+
+    box-sizing:border-box;
+
+    scrollbar-width:thin;
+    scrollbar-color:#4fc3f7 transparent;
 }
 
 #telemetry h2{
@@ -83,12 +88,9 @@ body{
 /* AI Alert Box */
 
 #alertMessage{
+    background:rgba(255,255,255,0.05);
 
-    background:
-    rgba(255,255,255,0.05);
-
-    border-left:
-    4px solid #FFD54F;
+    border-left:4px solid #FFD54F;
 
     padding:10px;
 
@@ -104,7 +106,6 @@ body{
 /* Progress Bar */
 
 #progressBar{
-
     width:100%;
 
     height:12px;
@@ -119,19 +120,16 @@ body{
 }
 
 #progressFill{
-
     width:0%;
 
     height:100%;
 
     background:#4CAF50;
 
-    transition:
-    width 0.6s ease;
+    transition:width 0.6s ease;
 }
 
 #progressText{
-
     text-align:center;
 
     margin-top:8px;
@@ -139,12 +137,13 @@ body{
     font-size:13px;
 
     font-weight:bold;
+
+    color:white;
 }
 
 /* Route Tracker */
 
 #routeTracker{
-
     list-style:none;
 
     padding-left:0;
@@ -153,10 +152,11 @@ body{
 }
 
 #routeTracker li{
-
     padding:4px 0;
 
     font-size:14px;
+
+    color:white;
 }
 
 /* Scrollbar */
@@ -172,83 +172,4 @@ body{
 
 #telemetry::-webkit-scrollbar-track{
     background:transparent;
-}
-#telemetry h2{
-    margin-top:0;
-    color:#4fc3f7;
-}
-
-#telemetry h3{
-    color:#4fc3f7;
-    margin-top:15px;
-    margin-bottom:8px;
-}
-
-#telemetry p{
-    margin:8px 0;
-    font-size:14px;
-}
-
-#telemetry hr{
-    border:1px solid rgba(255,255,255,0.15);
-    margin:12px 0;
-}
-
-#sealAlert{
-    font-weight:bold;
-}
-
-.alert-safe{
-    color:#4CAF50;
-}
-
-.alert-danger{
-    color:#F44336;
-}
-
-/* AI Alerts */
-
-#alertMessage{
-    color:#FFD54F;
-    font-weight:bold;
-    margin-bottom:15px;
-    padding:8px;
-    background:rgba(255,255,255,0.05);
-    border-radius:6px;
-}
-
-/* Progress Bar */
-
-#progressBar{
-    width:100%;
-    height:12px;
-    background:#1b2b45;
-    border-radius:8px;
-    overflow:hidden;
-    margin-top:10px;
-}
-
-#progressFill{
-    height:100%;
-    width:0%;
-    background:#4CAF50;
-    transition:width 0.5s ease;
-}
-
-#progressText{
-    margin-top:8px;
-    font-weight:bold;
-    text-align:center;
-}
-
-/* Route Tracker */
-
-#routeTracker{
-    list-style:none;
-    padding-left:0;
-    margin-top:10px;
-}
-
-#routeTracker li{
-    margin-bottom:6px;
 }
