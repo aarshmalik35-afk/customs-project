@@ -86,6 +86,10 @@ const route = [
 let routeIndex = 1;
 let currentLocation = route[routeIndex];
 
+let riskHistory = [];
+
+let healthScore = 100;
+
 const containerId =
 "CONT-" +
 Math.floor(100000 + Math.random() * 900000);
@@ -308,6 +312,30 @@ if(sealStatus === "Broken") risk += 40;
 if(tilt > 8) risk += 15;
 
 risk = Math.min(risk,100);
+
+healthScore = 100 - risk;
+
+if(shockEvents > 10)
+    healthScore -= 5;
+
+if(sealStatus === "Broken")
+    healthScore -= 10;
+
+healthScore = Math.max(
+    0,
+    Math.min(
+        100,
+        healthScore
+    )
+);
+
+riskHistory.push(risk);
+
+if(riskHistory.length > 10){
+
+    riskHistory.shift();
+
+}
 
 // Customs Status
 let status = "Approved";
