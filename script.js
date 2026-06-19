@@ -480,13 +480,6 @@ tilt;
 document.getElementById("location").textContent =
 location;
 
-document.getElementById(
-    "containerStatus"
-).textContent =
-location === "Rotterdam Port"
-? "Delivered"
-: "In Transit";
-
 document.getElementById("eta").textContent =
 eta;
 
@@ -503,29 +496,10 @@ document.getElementById(
 ).style.width =
 healthScore + "%";
 
-const healthFill =
 document.getElementById(
-    "healthFill"
-);
-
-if(healthScore >= 80){
-
-    healthFill.style.background =
-    "#4CAF50";
-
-}
-else if(healthScore >= 50){
-
-    healthFill.style.background =
-    "#FF9800";
-
-}
-else{
-
-    healthFill.style.background =
-    "#F44336";
-
-}
+    "healthText"
+).textContent =
+healthScore + "%";
 
 // RISK TREND GRAPH
 
@@ -597,6 +571,13 @@ document.getElementById(
     "healthScore"
 ).textContent =
 healthScore;
+
+document.getElementById(
+    "riskTrend"
+).textContent =
+riskHistory.join(
+    " → "
+);
 
 // Progress Bar
 document.getElementById(
