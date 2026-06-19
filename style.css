@@ -26,6 +26,19 @@ body{
 
 }
 
+#header h1{
+
+    color:white;
+
+    margin:0;
+
+}
+    padding:10px 20px;
+
+    border-radius:10px;
+
+}
+
 #telemetry{
     position:absolute;
     top:20px;
