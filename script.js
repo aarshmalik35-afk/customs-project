@@ -501,6 +501,30 @@ document.getElementById(
 ).textContent =
 healthScore + "%";
 
+const healthFill =
+document.getElementById(
+    "healthFill"
+);
+
+if(healthScore >= 80){
+
+    healthFill.style.background =
+    "#4CAF50";
+
+}
+else if(healthScore >= 50){
+
+    healthFill.style.background =
+    "#FF9800";
+
+}
+else{
+
+    healthFill.style.background =
+    "#F44336";
+
+}
+
 // RISK TREND GRAPH
 
 for(let i = 0; i < 10; i++){
@@ -571,13 +595,6 @@ document.getElementById(
     "healthScore"
 ).textContent =
 healthScore;
-
-document.getElementById(
-    "riskTrend"
-).textContent =
-riskHistory.join(
-    " → "
-);
 
 // Progress Bar
 document.getElementById(
