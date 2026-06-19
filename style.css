@@ -47,7 +47,12 @@ body{
     z-index:10;
 
     box-shadow:
-    0 0 20px rgba(0,0,0,0.4);
+    0 0 25px rgba(
+        79,
+        195,
+        247,
+        0.15
+       );
 
     box-sizing:border-box;
 
