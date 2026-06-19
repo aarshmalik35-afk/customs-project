@@ -489,36 +489,12 @@ risk;
 document.getElementById("status").textContent =
 status;
 
-// HEALTH BAR
-
 document.getElementById(
-    "healthFill"
-).style.width =
-healthScore + "%";
-
-document.getElementById(
-    "healthText"
+    "riskTrend"
 ).textContent =
-healthScore + "%";
-
-// RISK TREND GRAPH
-
-for(let i = 0; i < 10; i++){
-
-    const bar =
-    document.getElementById(
-        "risk" + i
-    );
-
-    if(!bar) continue;
-
-    const value =
-    riskHistory[i] || 0;
-
-    bar.style.height =
-    value + "px";
-
-}
+riskHistory.join(
+    " → "
+);
 
 const badge =
 document.getElementById(
