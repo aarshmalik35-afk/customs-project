@@ -496,11 +496,6 @@ document.getElementById(
 ).style.width =
 healthScore + "%";
 
-document.getElementById(
-    "healthText"
-).textContent =
-healthScore + "%";
-
 const healthFill =
 document.getElementById(
     "healthFill"
