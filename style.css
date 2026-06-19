@@ -175,3 +175,20 @@ body{
 #telemetry::-webkit-scrollbar-track{
     background:transparent;
 }
+#statusBadge{
+
+    margin-top:10px;
+
+    padding:10px;
+
+    text-align:center;
+
+    font-weight:bold;
+
+    border-radius:8px;
+
+    background:#1b5e20;
+
+    color:white;
+
+}
