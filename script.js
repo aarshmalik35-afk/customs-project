@@ -480,6 +480,13 @@ tilt;
 document.getElementById("location").textContent =
 location;
 
+document.getElementById(
+    "containerStatus"
+).textContent =
+location === "Rotterdam Port"
+? "Delivered"
+: "In Transit";
+
 document.getElementById("eta").textContent =
 eta;
 
