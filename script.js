@@ -487,6 +487,42 @@ risk;
 document.getElementById("status").textContent =
 status;
 
+const badge =
+document.getElementById(
+    "statusBadge"
+);
+
+if(status === "Approved"){
+
+    badge.innerHTML =
+    "🟢 APPROVED";
+
+    badge.style.background =
+    "#1b5e20";
+
+}
+else if(
+    status ===
+    "Manual Review"
+){
+
+    badge.innerHTML =
+    "🟠 MANUAL REVIEW";
+
+    badge.style.background =
+    "#e65100";
+
+}
+else{
+
+    badge.innerHTML =
+    "🔴 HIGH RISK";
+
+    badge.style.background =
+    "#b71c1c";
+
+}
+
 document.getElementById("lastUpdated").textContent =
 new Date().toLocaleTimeString();
 
