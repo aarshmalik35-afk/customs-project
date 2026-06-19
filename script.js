@@ -158,9 +158,11 @@ loader.load(
             new THREE.Vector3()
         );
 
-        ship.position.sub(center);
-        ship.position.x = -500;
-        ship.position.y = -200;
+ship.position.set(
+    -center.x,
+    -center.y,
+    -center.z
+);
 
         // Auto scale
         const size =
