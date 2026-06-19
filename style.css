@@ -104,21 +104,31 @@ body{
 }
 
 #progressBar{
+
     width:100%;
+
     height:22px;
 
-    background:#13233f;
+    background:#10243d;
 
     border-radius:12px;
 
     overflow:hidden;
 
-    margin-top:12px;
+    margin-top:10px;
 
-    border:1px solid rgba(255,255,255,0.15);
+    border:
+    1px solid rgba(
+        255,
+        255,
+        255,
+        0.15
+    );
+
 }
 
 #progressFill{
+
     height:100%;
 
     width:0%;
@@ -126,15 +136,17 @@ body{
     background:
     linear-gradient(
         90deg,
-        #00e676,
-        #00c853
+        #00c853,
+        #69f0ae
     );
 
     transition:
     width 0.8s ease;
+
 }
 
 #progressText{
+
     text-align:center;
 
     margin-top:10px;
@@ -144,6 +156,7 @@ body{
     font-weight:bold;
 
     color:#4fc3f7;
+
 }
 
 /* Route Tracker */
