@@ -487,6 +487,13 @@ risk;
 document.getElementById("status").textContent =
 status;
 
+document.getElementById(
+    "riskTrend"
+).textContent =
+riskHistory.join(
+    " → "
+);
+
 const badge =
 document.getElementById(
     "statusBadge"
