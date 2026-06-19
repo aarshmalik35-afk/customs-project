@@ -169,19 +169,30 @@ body{
 
 }
 
-/* Route Tracker */
+#routeTracker{
 
-#routeTracker li{
-    padding:8px 0;
-    font-size:15px;
+    list-style:none;
+
+    padding-left:0;
+
 }
 
 #routeTracker li{
-    padding:4px 0;
 
-    font-size:14px;
+    padding:8px 0;
 
-    color:white;
+    font-size:15px;
+
+    border-left:
+    2px solid rgba(
+        255,
+        255,
+        255,
+        0.15
+    );
+
+    padding-left:10px;
+
 }
 
 /* Scrollbar */
